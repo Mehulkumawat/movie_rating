@@ -1,14 +1,30 @@
 import './App.css';
-import MovieList from './components/MovieList';
+import './Assets/custom.css'; 
+import MovieList from './components/MovieList/MovieList';
+import Header from './components/Header/header';
+// import Login from './components/Login/Login'
+import SignUp from './components/SignUp/SignUp'
+import { useState, useEffect } from 'react';
 function App() {
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  function postRenderHandler(){
+    const token = localStorage.getItem("token");
+    if(token) {
+      setLoggedIn(true); 
+    }
+  }
+
+  function handleSuccessfulLogin(){
+    setLoggedIn(true);
+  }
+  useEffect(postRenderHandler, []);
   return (
     <div className="App">
       <p>
-        <h1>Movie rating website</h1>
-        <MovieList />
+        <Header />
+        {isLoggedIn? (<MovieList />):(<SignUp onLoginSuccess={handleSuccessfulLogin}/>)}
       </p>
     </div>
   );
 }
-
 export default App;
